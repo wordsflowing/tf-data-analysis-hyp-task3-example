@@ -1,13 +1,11 @@
 import pandas as pd
 import numpy as np
-import scipy.stats as stats
-from scipy.stats import ttest_ind, mannwhitneyu
+import scipy.stats as sps
 
 
 chat_id = 422119389 # Ваш chat ID, не меняйте название переменной
 
-def solution(x, y) -> bool: # Одна или две выборке на входе, заполняется исходя из условия
-    # Измените код этой функции
-    # Это будет вашим решением
-    # Не меняйте название функции и её аргументы
-    return stats.ttest_ind(x, y, equal_var=False)[1] < 0.09 # Ваш ответ, True или False
+def solution(x: np.array, y: np.array) -> bool: 
+    p_value = sps.permutation_test((x, y), lambda x, y, axis: np.mean(x, axis=axis) - np.mean(y, axis=axis), vectorized=True, n_resamples=5000, alternative='greater').pvalue 
+    alpha = 0.09
+    return p_value < alpha
